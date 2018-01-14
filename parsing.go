@@ -67,7 +67,7 @@ func readToken(stream *lexerStream, state lexerState, functions map[string]Expre
 
 	// numeric is 0-9, or . or 0x followed by digits
 	// string starts with '
-	// variable is alphanumeric, always starts with a letter
+	// variable is alphanumeric, always starts with a letter or $
 	// bracket always means variable
 	// symbols are anything non-alphanumeric
 	// all others read into a buffer until they reach the end of the stream
@@ -285,6 +285,8 @@ func readToken(stream *lexerStream, state lexerState, functions map[string]Expre
 	ret.Kind = kind
 	ret.Value = tokenValue
 
+	fmt.Printf("ret: %v",tokenValue)
+
 	return ret, nil, (kind != UNKNOWN)
 }
 
@@ -455,8 +457,8 @@ func isNotAlphanumeric(character rune) bool {
 }
 
 func isVariableNameBegining (character rune) bool {
-	return unicode.IsLetter(character) ||
-		!isNotDollar(character)
+	return !isNotDollar(character) || unicode.IsLetter(character)
+
 }
 
 func isVariableName(character rune) bool {
@@ -464,7 +466,8 @@ func isVariableName(character rune) bool {
 	return unicode.IsLetter(character) ||
 		unicode.IsDigit(character) ||
 		character == '_' ||
-		character == '.'
+		character == '.' ||
+		!isNotDollar(character)
 }
 
 func isNotClosingBracket(character rune) bool {
