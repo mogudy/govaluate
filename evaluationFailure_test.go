@@ -87,6 +87,22 @@ func TestStructParameter(t *testing.T) {
 	}
 }
 
+func TestMapParameter(t *testing.T) {
+	expected := make(map[string]interface{})
+	expected["xi"] = "xi"
+	expression, err := NewEvaluableExpression("foo.xi")
+	if err != nil {
+		t.Errorf("Expression error: %v", err)
+	}
+	parameters := map[string]interface{}{"foo": expected}
+	v, err := expression.Evaluate(parameters)
+	if err != nil {
+		t.Errorf("Expected no error, but have %s", err)
+	} else if v != expected["xi"] {
+		t.Errorf("Values mismatch: %v != %v", expected["xi"], v)
+	}
+}
+
 func TestNilParameterUsage(test *testing.T) {
 
 	expression, err := NewEvaluableExpression("2 > 1")
