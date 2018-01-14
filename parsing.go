@@ -445,6 +445,7 @@ func isNotAlphanumeric(character rune) bool {
 
 	return !(unicode.IsDigit(character) ||
 		unicode.IsLetter(character) ||
+		character == '$' ||
 		character == '(' ||
 		character == ')' ||
 		character == '[' ||
