@@ -139,9 +139,11 @@ func readToken(stream *lexerStream, state lexerState, functions map[string]Expre
 		}
 
 		// regular variable - or function?
-		if unicode.IsLetter(character) {
+		if isVariableNameBegining(character) {
 
 			tokenString = readTokenUntilFalse(stream, isVariableName)
+
+			//fmt.Printf("token: %s",tokenString)
 
 			tokenValue = tokenString
 			kind = VARIABLE
@@ -432,25 +434,31 @@ func isHexDigit(character rune) bool {
 }
 
 func isNumeric(character rune) bool {
-
 	return unicode.IsDigit(character) || character == '.'
 }
 
 func isNotQuote(character rune) bool {
-
 	return character != '\'' && character != '"'
+}
+
+func isNotDollar(character rune) bool {
+	return character != '$'
 }
 
 func isNotAlphanumeric(character rune) bool {
 
 	return !(unicode.IsDigit(character) ||
 		unicode.IsLetter(character) ||
-		character == '$' ||
 		character == '(' ||
 		character == ')' ||
 		character == '[' ||
 		character == ']' || // starting to feel like there needs to be an `isOperation` func (#59)
 		!isNotQuote(character))
+}
+
+func isVariableNameBegining (character rune) bool {
+	return unicode.IsLetter(character) ||
+		!isNotDollar(character)
 }
 
 func isVariableName(character rune) bool {
