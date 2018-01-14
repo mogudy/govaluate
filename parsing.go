@@ -285,8 +285,7 @@ func readToken(stream *lexerStream, state lexerState, functions map[string]Expre
 	ret.Kind = kind
 	ret.Value = tokenValue
 
-	fmt.Printf("ret: %v",tokenValue)
-
+	//fmt.Printf("ret: %v",tokenValue)
 	return ret, nil, (kind != UNKNOWN)
 }
 
