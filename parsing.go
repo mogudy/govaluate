@@ -124,19 +124,19 @@ func readToken(stream *lexerStream, state lexerState, functions map[string]Expre
 		}
 
 		// escaped variable
-		if character == '[' {
-
-			tokenValue, completed = readUntilFalse(stream, true, false, true, isNotClosingBracket)
-			kind = VARIABLE
-
-			if !completed {
-				return ExpressionToken{}, errors.New("Unclosed parameter bracket"), false
-			}
-
-			// above method normally rewinds us to the closing bracket, which we want to skip.
-			stream.rewind(-1)
-			break
-		}
+		//if character == '[' {
+		//
+		//	tokenValue, completed = readUntilFalse(stream, true, false, true, isNotClosingBracket)
+		//	kind = VARIABLE
+		//
+		//	if !completed {
+		//		return ExpressionToken{}, errors.New("Unclosed parameter bracket"), false
+		//	}
+		//
+		//	// above method normally rewinds us to the closing bracket, which we want to skip.
+		//	stream.rewind(-1)
+		//	break
+		//}
 
 		// regular variable - or function?
 		if isVariableNameBegining(character) {
@@ -440,8 +440,8 @@ func isNotQuote(character rune) bool {
 	return character != '\'' && character != '"'
 }
 
-func isNotDollar(character rune) bool {
-	return character != '$'
+func isDollar(character rune) bool {
+	return character == '$'
 }
 
 func isNotAlphanumeric(character rune) bool {
@@ -456,8 +456,7 @@ func isNotAlphanumeric(character rune) bool {
 }
 
 func isVariableNameBegining (character rune) bool {
-	return !isNotDollar(character) || unicode.IsLetter(character)
-
+	return isDollar(character) || unicode.IsLetter(character)
 }
 
 func isVariableName(character rune) bool {
@@ -466,7 +465,9 @@ func isVariableName(character rune) bool {
 		unicode.IsDigit(character) ||
 		character == '_' ||
 		character == '.' ||
-		!isNotDollar(character)
+		character == '[' ||
+		character == ']' ||
+		isDollar(character)
 }
 
 func isNotClosingBracket(character rune) bool {

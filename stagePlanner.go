@@ -359,7 +359,7 @@ func planAccessor(stream *tokenStream) (*evaluationStage, error) {
 
 		symbol:          ACCESS,
 		rightStage:      rightStage,
-		operator:        makeAccessorStage(token.Value.([]string)),
+		operator:        makeJsonAccessorStage(token.Value.([]string)),
 		typeErrorFormat: "Unable to access parameter field or method '%v': %v",
 	}, nil
 }

@@ -2,6 +2,7 @@ package govaluate
 
 import (
 	"errors"
+	"dev.ionsay.com/nbxx/go/nbms/deepmap"
 )
 
 /*
@@ -29,4 +30,12 @@ func (p MapParameters) Get(name string) (interface{}, error) {
 	}
 
 	return value, nil
+}
+
+type JsonParameters deepmap.DeepMap
+
+func (p JsonParameters) Get(name string) (interface{}, error) {
+	dm := deepmap.DeepMap(p)
+	res,err := dm.GetObj(name)
+	return res,err
 }

@@ -415,6 +415,19 @@ func makeAccessorStage(pair []string) evaluationOperator {
 	}
 }
 
+func makeJsonAccessorStage(pair []string) evaluationOperator {
+	reconstructed := strings.Join(pair, ".")
+	return func(left interface{}, right interface{}, parameters Parameters) (ret interface{}, err error) {
+		defer func() {
+			if r := recover(); r != nil {
+				err = fmt.Errorf("Failed to access '%s': %v", reconstructed, r.(string))
+				ret = nil
+			}
+		}()
+		return parameters.Get(reconstructed)
+	}
+}
+
 func separatorStage(left interface{}, right interface{}, parameters Parameters) (interface{}, error) {
 
 	var ret []interface{}

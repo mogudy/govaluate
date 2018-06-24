@@ -3,6 +3,7 @@ package govaluate
 import (
 	"errors"
 	"fmt"
+	"dev.ionsay.com/nbxx/go/nbms/deepmap"
 )
 
 const isoDateFormat string = "2006-01-02T15:04:05.999999999Z0700"
@@ -133,8 +134,13 @@ func (this EvaluableExpression) Evaluate(parameters map[string]interface{}) (int
 	if parameters == nil {
 		return this.Eval(nil)
 	}
+	// using json parameters instead of map parameters
+	jsonparam,err := deepmap.NewFromObject(parameters)
+	if err != nil {
+		return nil,err
+	}
 
-	return this.Eval(MapParameters(parameters))
+	return this.Eval(JsonParameters(*jsonparam))
 }
 
 /*
