@@ -129,7 +129,7 @@ func NewEvaluableExpressionWithFunctions(expression string, functions map[string
 /*
 	Same as `Eval`, but automatically wraps a map of parameters into a `govalute.Parameters` structure.
 */
-func (this EvaluableExpression) Evaluate(parameters map[string]interface{}) (interface{}, error) {
+func (this EvaluableExpression) EvaluateMap(parameters map[string]interface{}) (interface{}, error) {
 
 	if parameters == nil {
 		return this.Eval(nil)
@@ -141,6 +141,13 @@ func (this EvaluableExpression) Evaluate(parameters map[string]interface{}) (int
 	}
 
 	return this.Eval(JsonParameters(*jsonparam))
+}
+
+func (this EvaluableExpression) Evaluate(parameters *deepmap.DeepMap) (interface{}, error) {
+	if parameters == nil {
+		return this.Eval(nil)
+	}
+	return this.Eval(JsonParameters(*parameters))
 }
 
 /*
